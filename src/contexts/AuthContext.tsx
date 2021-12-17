@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 
-import { firebase } from '../services/firebase';
+import { firebase, auth } from '../services/firebase';
 
 type User = {
   id: string;
@@ -22,6 +22,7 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthContextProvider(props: AuthContextProviderProps) {
   const [user, setUser] = useState<User>();
 
+  // useEffect é um hook do react, podendo ser identificado com 'use'
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -47,7 +48,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
   async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    const result = await firebase.auth().signInWithPopup(provider);
+    const result = await auth.signInWithPopup(provider);
 
     if (result.user) {
       const { displayName, photoURL, uid } = result.user;
